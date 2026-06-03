@@ -8,3 +8,4 @@ import com.sena.database_connection.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 }
+
