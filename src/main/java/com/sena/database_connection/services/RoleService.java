@@ -1,6 +1,7 @@
 package com.sena.database_connection.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -10,32 +11,50 @@ import com.sena.database_connection.repositories.RoleRepository;
 @Service
 public class RoleService {
 
+    // Repositorio encargado de las operaciones sobre la tabla roles
     private RoleRepository repository;
 
+    // Constructor con inyección de dependencias
     public RoleService(RoleRepository repository) {
         this.repository = repository;
     }
 
-    // Metodo obtener todos los usuarios
-
-    public List<Role> obetenerTodos() {
-
-        // Llama al método findAll de JPARepository para obtener todos los
-        // registros de la tabla users.
+    
+    public List<Role> obtenerTodos() {
         return this.repository.findAll();
     }
 
+    
+    public Optional<Role> porId(Long id) {
+        return this.repository.findById(id);
+    }
 
-    // Metodo para crear un rol
-
-public Role crear(Role role) {
-
-        // Llama al método save de JPARepository para guardar el usuario
-        // en la base de datos.
+    public Role crear(Role role) {
         return this.repository.save(role);
     }
-}
-
-    // Metodo para actualizar el rol 
 
     
+    public Role actualizar(Role role) {
+
+        Optional<Role> roleFound = this.porId(role.getId());
+
+        if (roleFound.isEmpty()) {
+            return null;
+        }
+
+        return this.repository.save(role);
+    }
+
+    public Role eliminar(Long id) {
+
+        Optional<Role> roleFound = this.porId(id);
+
+        if (roleFound.isEmpty()) {
+            return null;
+        }
+
+        this.repository.delete(roleFound.get());
+
+        return roleFound.get();
+    }
+}
